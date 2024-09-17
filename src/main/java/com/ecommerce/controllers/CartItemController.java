@@ -2,6 +2,7 @@ package com.ecommerce.controllers;
 
 import com.ecommerce.models.CartItem;
 import com.ecommerce.requestDto.AddCartItemRequest;
+import com.ecommerce.requestDto.UpdateCartItemRequest;
 import com.ecommerce.responseDto.GetCartItemResponse;
 import com.ecommerce.services.CartItemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,18 @@ public class CartItemController {
             return new ResponseEntity<>(items, HttpStatus.OK);
         } catch (RuntimeException ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping("/update-CartItem")
+    public ResponseEntity<?> updateCartItem(@RequestBody UpdateCartItemRequest updateCartItemRequest){
+
+        try{
+            String response=cartItemService.updateCartItem(updateCartItemRequest);
+            return new ResponseEntity<>(response,HttpStatus.OK);
+        }
+        catch(Exception e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
 

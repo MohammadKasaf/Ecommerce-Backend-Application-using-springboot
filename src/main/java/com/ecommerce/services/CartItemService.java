@@ -7,6 +7,7 @@ import com.ecommerce.repositories.CartItemRepository;
 import com.ecommerce.repositories.ProductRepository;
 import com.ecommerce.repositories.ShoppingCartRepository;
 import com.ecommerce.requestDto.AddCartItemRequest;
+import com.ecommerce.requestDto.UpdateCartItemRequest;
 import com.ecommerce.responseDto.GetCartItemResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -107,6 +108,20 @@ public class CartItemService {
         }
 
         return responseList; // Return the list of responses
+    }
+
+    public String updateCartItem(UpdateCartItemRequest cartItemRequest){
+
+        CartItem cartItem=cartItemRepository.findById(cartItemRequest.getCartItemId())
+                .orElseThrow(()->new RuntimeException("cartItem not found for id: "+cartItemRequest.getCartItemId()));
+        // Update the cart item quantity
+        cartItem.setQuantity(cartItemRequest.getQuantity());
+
+        // Save the updated cart item
+        cartItemRepository.save(cartItem);
+
+        return "Cart item updated successfully.";
+
     }
 
 

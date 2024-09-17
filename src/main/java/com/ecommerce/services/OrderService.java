@@ -85,7 +85,7 @@ public class OrderService {
             return "Shopping cart is empty, cannot place the order.";
         }
 
-        // Proceed with order placement
+        // Create a new Order object before using it in the loop
         Order order = new Order();
         order.setUser(user);
         order.setOrderDate(LocalDateTime.now());
@@ -97,15 +97,30 @@ public class OrderService {
         List<OrderItem> orderItems = new ArrayList<>();
         double totalAmount = 0.0;
 
-        // Iterate through the shopping cart items and prepare the order items
+        // Iterate through the shopping cart items and check stock availability
         for (CartItem cartItem : shoppingCart.getCartItems()) {
+            Product product = cartItem.getProduct();
+            int requestedQuantity = cartItem.getQuantity();
+            int availableStock = product.getStockQuantity();
+
+            // Check if the requested quantity is available in stock
+            if (requestedQuantity > availableStock) {
+                return "Sorry, the requested quantity for the product '" + product.getName() + "' is not available. Available stock: " + availableStock;
+            }
+
+            // If stock is available, decrease the stock quantity
+            product.setStockQuantity(availableStock - requestedQuantity);
+            productRepository.save(product); // Save the updated stock quantity
+
+            // Create an order item
             OrderItem orderItem = new OrderItem();
             orderItem.setOrder(order);
-            orderItem.setProduct(cartItem.getProduct());
-            orderItem.setQuantity(cartItem.getQuantity());
+            orderItem.setProduct(product);
+            orderItem.setQuantity(requestedQuantity);
             orderItem.setPrice(cartItem.getPrice());
             orderItems.add(orderItem);
-            totalAmount += cartItem.getPrice() * cartItem.getQuantity();
+
+            totalAmount += cartItem.getPrice() * requestedQuantity;
         }
 
         // Set order details
