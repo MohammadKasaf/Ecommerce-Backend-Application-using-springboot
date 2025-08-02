@@ -1,2 +1,18 @@
 # Ecommerce-Backend-Application-using-springboot
-This repository contains a comprehensive eCommerce application developed using Spring Boot. The application features a wide range of functionalities required for an online shopping platform, including user management, product management, shopping cart, order processing, reviews, and more.
+
+### Tech Stack
+- Java
+- Spring Boot
+- Hibernate/JPA
+- MySQL
+- Maven
+- JWT
+- Swagger
+
+### Features
+- User Registration/Login
+- Movie & Show CRUD
+- Book/Cancel Tickets
+- Seat Booking Logic
+- JWT Authentication
+
